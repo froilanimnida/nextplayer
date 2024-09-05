@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.media.AudioManager
 import android.media.audiofx.LoudnessEnhancer
@@ -408,11 +409,22 @@ class PlayerActivity : AppCompatActivity() {
                     val systemCaptionStyle = CaptionStyleCompat.createFromCaptionStyle(captioningManager.userStyle)
                     setStyle(systemCaptionStyle)
                 } else {
+                    val outlinePaint = Paint().apply {
+                        isAntiAlias = true
+                        style = Paint.Style.STROKE
+                        color = Color.BLACK // TODO: Make it a preference rather than defined
+                        strokeWidth = playerPreferences.subtitleBorder.toFloat()
+                    }
+                    val fillPaint = Paint().apply {
+                        isAntiAlias = true
+                        style = Paint.Style.FILL
+                        color = Color.BLACK // TODO: Make it a preference rather than defined
+                    }
                     val userStyle = CaptionStyleCompat(
                         Color.WHITE,
                         Color.BLACK.takeIf { playerPreferences.subtitleBackground } ?: Color.TRANSPARENT,
                         Color.TRANSPARENT,
-                        CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW,
+                        CaptionStyleCompat.EDGE_TYPE_OUTLINE,
                         Color.BLACK,
                         Typeface.create(
                             playerPreferences.subtitleFont.toTypeface(),

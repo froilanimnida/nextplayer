@@ -2,11 +2,15 @@ package dev.anilbeesetti.nextplayer.settings.screens.subtitle
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -28,6 +32,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
@@ -115,6 +120,9 @@ fun SubtitlePreferencesScreen(
                 currentFont = preferences.subtitleFont,
                 onClick = { viewModel.showDialog(SubtitlePreferenceDialog.SubtitleFontDialog) },
                 enabled = preferences.useSystemCaptionStyle.not(),
+            )
+            SubtitleFontBorderPreference(
+                onClick = { viewModel.showDialog(SubtitlePreferenceDialog.SubtitleFontBorderDialog) },
             )
             SubtitleTextBoldPreference(
                 isChecked = preferences.subtitleTextBold,
@@ -227,6 +235,71 @@ fun SubtitlePreferencesScreen(
                         }
                     }
                 }
+
+                SubtitlePreferenceDialog.SubtitleFontBorderDialog -> {
+                    var borderSize by remember { mutableIntStateOf(preferences.subtitleBorder) }
+                    val fontSize by remember { mutableIntStateOf(preferences.subtitleTextSize) }
+                    val textPaintStroke = Paint().asFrameworkPaint().apply {
+                        isAntiAlias = true
+                        style = android.graphics.Paint.Style.STROKE
+                        textSize = fontSize.toFloat()
+                        color = android.graphics.Color.BLACK
+                        strokeWidth = borderSize.toFloat()
+                        strokeMiter = 10f
+                        strokeJoin = android.graphics.Paint.Join.ROUND
+                    }
+                    val textPaint = Paint().asFrameworkPaint().apply {
+                        isAntiAlias = true
+                        style = android.graphics.Paint.Style.FILL
+                        textSize = fontSize.toFloat()
+                        color = android.graphics.Color.WHITE
+                    }
+                    NextDialog(
+                        onDismissRequest = viewModel::hideDialog,
+                        title = { Text(text = stringResource(id = R.string.subtitle_font_border_size)) },
+                        content = {
+                            Canvas(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height((fontSize * 2).dp),
+                                onDraw = {
+                                    val text = fontSize.toString()
+                                    val textWidth = textPaintStroke.measureText(text)
+                                    val x = (size.width - textWidth) / 2
+                                    val y = (size.height + fontSize) / 2
+
+                                    drawIntoCanvas {
+                                        it.nativeCanvas.drawText(
+                                            text,
+                                            x,
+                                            y,
+                                            textPaintStroke
+                                        )
+
+                                        it.nativeCanvas.drawText(
+                                            text,
+                                            x,
+                                            y,
+                                            textPaint
+                                        )
+                                    }
+                                }
+                            )
+
+                            Slider(
+                                value = borderSize.toFloat(),
+                                onValueChange = { borderSize = it.toInt() },
+                                valueRange = 2f..20f,
+                            )
+                        },
+                        confirmButton = {
+                            DoneButton(onClick = {
+                                viewModel.hideDialog()
+                            })
+                        },
+                        dismissButton = { CancelButton(onClick = viewModel::hideDialog) },
+                    )
+                }
             }
         }
     }
@@ -288,6 +361,18 @@ fun SubtitleFontPreference(
         icon = NextIcons.Font,
         onClick = onClick,
         enabled = enabled,
+    )
+}
+
+@Composable
+fun SubtitleFontBorderPreference(
+    onClick: () -> Unit,
+) {
+    ClickablePreferenceItem(
+        title = stringResource(id = R.string.subtitle_font_border_size),
+        icon = NextIcons.Font,
+        onClick = onClick,
+        enabled = true,
     )
 }
 
