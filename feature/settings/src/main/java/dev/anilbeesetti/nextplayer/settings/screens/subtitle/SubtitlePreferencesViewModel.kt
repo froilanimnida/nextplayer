@@ -60,10 +60,10 @@ class SubtitlePreferencesViewModel @Inject constructor(
         }
     }
 
-    fun updateSubtitleFontBorder(value: Int) {
+    fun updateSubtitleStyle(value: String) {
         viewModelScope.launch {
             preferencesRepository.updatePlayerPreferences {
-                it.copy(subtitleBorder = value)
+                it.copy(subtitleEdgeStyle = value)
             }
         }
     }
@@ -114,7 +114,7 @@ sealed interface SubtitlePreferenceDialog {
     object SubtitleFontDialog : SubtitlePreferenceDialog
     object SubtitleSizeDialog : SubtitlePreferenceDialog
     object SubtitleEncodingDialog : SubtitlePreferenceDialog
-    object SubtitleFontBorderDialog : SubtitlePreferenceDialog
+    object SubtitleStyleDialog : SubtitlePreferenceDialog
 }
 
 sealed interface SubtitlePreferencesEvent {

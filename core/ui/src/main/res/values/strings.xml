@@ -124,7 +124,13 @@
     <string name="subtitle_text_bold">Bold subtitle text</string>
     <string name="subtitle_text_bold_desc">Use bold text for subtitle</string>
     <string name="subtitle_text_size">Subtitle text size</string>
-    <string name="subtitle_font_border_size">Subtitle font border size</string>
+    <string name="subtitle_font_border_edge_style">Subtitle font edge style</string>
+    <string name="subtitle_font_border_edge_style_desc">Set edge style for subtitle text</string>
+    <string name="subtitle_font_border_edge_style_none">None</string>
+    <string name="subtitle_font_border_edge_style_drop_shadow">Drop shadow</string>
+    <string name="subtitle_font_border_edge_style_raised">Raised</string>
+    <string name="subtitle_font_border_edge_style_depressed">Depressed</string>
+    <string name="subtitle_font_border_edge_style_uniform">Uniform</string>
     <string name="subtitle_desc">Subtitle appearance, playback options</string>
     <string name="subtitle_background">Subtitle background</string>
     <string name="subtitle_background_desc">Enable background to subtitle text</string>

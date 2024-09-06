@@ -409,22 +409,17 @@ class PlayerActivity : AppCompatActivity() {
                     val systemCaptionStyle = CaptionStyleCompat.createFromCaptionStyle(captioningManager.userStyle)
                     setStyle(systemCaptionStyle)
                 } else {
-                    val outlinePaint = Paint().apply {
-                        isAntiAlias = true
-                        style = Paint.Style.STROKE
-                        color = Color.BLACK // TODO: Make it a preference rather than defined
-                        strokeWidth = playerPreferences.subtitleBorder.toFloat()
-                    }
-                    val fillPaint = Paint().apply {
-                        isAntiAlias = true
-                        style = Paint.Style.FILL
-                        color = Color.BLACK // TODO: Make it a preference rather than defined
+                    val edgeType = when (playerPreferences.subtitleEdgeStyle) {
+                        "None" -> CaptionStyleCompat.EDGE_TYPE_NONE
+                        "Outline" -> CaptionStyleCompat.EDGE_TYPE_OUTLINE
+                        "Drop Shadow" -> CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW
+                        else -> CaptionStyleCompat.EDGE_TYPE_NONE // Default case
                     }
                     val userStyle = CaptionStyleCompat(
                         Color.WHITE,
                         Color.BLACK.takeIf { playerPreferences.subtitleBackground } ?: Color.TRANSPARENT,
                         Color.TRANSPARENT,
-                        CaptionStyleCompat.EDGE_TYPE_OUTLINE,
+                        edgeType,
                         Color.BLACK,
                         Typeface.create(
                             playerPreferences.subtitleFont.toTypeface(),

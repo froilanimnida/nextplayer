@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Audiotrack
+import androidx.compose.material.icons.rounded.BorderStyle
 import androidx.compose.material.icons.rounded.BrightnessHigh
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CenterFocusStrong
@@ -69,6 +70,7 @@ object NextIcons {
     val Audio = Icons.Rounded.Audiotrack
     val Background = Icons.Rounded.FlipToBack
     val Bold = Icons.Rounded.FormatBold
+    val FontEdgeStyle = Icons.Rounded.BorderStyle
     val Brightness = Icons.Rounded.BrightnessHigh
     val Calendar = Icons.Rounded.CalendarMonth
     val Caption = Icons.Rounded.ClosedCaption
